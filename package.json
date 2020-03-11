@@ -1,0 +1,19 @@
+{
+  "name": "@gonchan93/legacy",
+  "version": "1.0.0",
+  "description": "showModalDialog Substitute",
+  "main": "dist/Legacy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gonchan93/Legacy.git"
+  },
+  "author": "gonchan93 <gonchan93+npm@gmail.com> (https://github.com/gonchan93/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gonchan93/Legacy/issues"
+  },
+  "homepage": "https://github.com/gonchan93/Legacy#readme"
+}
