@@ -191,7 +191,7 @@ export function showModalDialog(url, dialogArguments, options) {
             if (dialogArguments !== undefined) {
                 lw.dialogArguments = dialogArguments;
             }
-            if ((options === null || options === void 0 ? void 0 : options.width) !== undefined) {
+            if (typeof (options === null || options === void 0 ? void 0 : options.width) === 'number') {
                 lw.outerWidth = options.width;
             }
             if ((options === null || options === void 0 ? void 0 : options.height) !== undefined) {

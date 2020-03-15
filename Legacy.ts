@@ -18,6 +18,9 @@ class LayerWindow {
      */
     dialogArguments: any;
 
+    /**
+     * タイトルバー
+     */
     private readonly titleBar: HTMLDivElement;
     /**
      * 表示領域
@@ -64,7 +67,7 @@ class LayerWindow {
             titleArea.innerText = innerWindow.document.title;
             innerWindow.dialogArguments = this.dialogArguments;
             //iframeで開いているページのcloseメソッドを書き換える
-            innerWindow.close = () => { control.close()};
+            innerWindow.close = () => { control.close() };
             innerWindow.resizeTo = this.resizeTo;
             innerWindow.resizeBy = this.resizeBy;
             innerWindow.moveTo = this.moveTo;
@@ -133,11 +136,7 @@ class LayerWindow {
      * @param resizable 認める場合はtrue
      */
     set resizable(resizable: boolean) {
-        if (resizable) {
-            this.control.style.resize = "both";
-        } else {
-            this.control.style.resize = "none";
-        }
+        this.control.style.resize = resizable ? "both" : "none";
     }
 
     /**
@@ -193,31 +192,31 @@ class LayerWindow {
     }
 }
 
-export interface DialogOption{
+export interface DialogOption {
     /**
      * 疑似ウインドウを中央に表示するか
      */
-    center?:boolean;
+    center: boolean;
     /**
      * 幅
      */
-    width?: number;
+    width: number;
     /**
      * 高さ
      */
-    height?: number;
+    height: number;
     /**
      * 上端からの距離
      */
-    top?: number;
+    top: number;
     /**
      * 左端からの距離
      */
-    left?: number;
+    left: number;
     /**
      * ユーザーによるサイズ変更を認めるか
      */
-    resizable?: boolean;
+    resizable: boolean;
 }
 
 /**
@@ -226,29 +225,18 @@ export interface DialogOption{
  * @param dialogArguments ウインドウに渡すパラメータ
  * @param options 装飾を指定するオプション
  */
-export async function showModalDialog(url: string, dialogArguments?: any, options?: DialogOption): Promise<any> {
+export async function showModalDialog(url: string, dialogArguments?: any, options?: Partial<DialogOption>): Promise<any> {
     const dialog = document.body.appendChild(document.createElement("dialog"));
     try {
         const lw = new LayerWindow(dialog);
-        if (dialogArguments !== undefined) {
-            lw.dialogArguments = dialogArguments;
+        if (dialogArguments !== undefined) { lw.dialogArguments = dialogArguments; }
+        if (options !== undefined) {
+            if (options.width !== undefined) { lw.outerWidth = options.width; }
+            if (options.height !== undefined) { lw.outerHeight = options.height; }
+            if (options.resizable !== undefined) { lw.resizable = options.resizable; }
+            if (options.top !== undefined) { lw.screenY = options.top; }
+            if (options.left !== undefined) { lw.screenX = options.left; }
         }
-        if (options?.width !== undefined) {
-            lw.outerWidth = options.width;
-        }
-        if (options?.height !== undefined) {
-            lw.outerHeight = options.height;
-        }
-        if (options?.resizable !== undefined) {
-            lw.resizable = options.resizable;
-        }
-        if (options?.top !== undefined) {
-            lw.screenY = options.top;
-        }
-        if (options?.left !== undefined) {
-            lw.screenX = options.left;
-        }
-
         const result = lw.showModal(url);
         if (options?.center) {
             const x = (window.innerWidth - lw.outerWidth) / 2;

@@ -8,27 +8,27 @@ export interface DialogOption {
     /**
      * 疑似ウインドウを中央に表示するか
      */
-    center?: boolean;
+    center: boolean;
     /**
      * 幅
      */
-    width?: number;
+    width: number;
     /**
      * 高さ
      */
-    height?: number;
+    height: number;
     /**
      * 上端からの距離
      */
-    top?: number;
+    top: number;
     /**
      * 左端からの距離
      */
-    left?: number;
+    left: number;
     /**
      * ユーザーによるサイズ変更を認めるか
      */
-    resizable?: boolean;
+    resizable: boolean;
 }
 /**
  * 疑似的なウインドウを表示
@@ -36,4 +36,4 @@ export interface DialogOption {
  * @param dialogArguments ウインドウに渡すパラメータ
  * @param options 装飾を指定するオプション
  */
-export declare function showModalDialog(url: string, dialogArguments?: any, options?: DialogOption): Promise<any>;
+export declare function showModalDialog(url: string, dialogArguments?: any, options?: Partial<DialogOption>): Promise<any>;
