@@ -56,9 +56,7 @@ class LayerWindow {
         const closeButton = buttonArea.appendChild(_document.createElement("input"));
         closeButton.type = "button";
         closeButton.value = "×";
-        closeButton.onclick = () => {
-            control.close();
-        };
+        closeButton.onclick = () => { this.close(); };
         this.content = control.appendChild(_document.createElement("iframe"));
         this.content.style.boxSizing = "border-box";
         this.content.style.width = "100%";
@@ -67,7 +65,7 @@ class LayerWindow {
             titleArea.innerText = innerWindow.document.title;
             innerWindow.dialogArguments = this.dialogArguments;
             //iframeで開いているページのcloseメソッドを書き換える
-            innerWindow.close = () => { control.close() };
+            innerWindow.close = this.close.bind(this);
             innerWindow.resizeTo = this.resizeTo;
             innerWindow.resizeBy = this.resizeBy;
             innerWindow.moveTo = this.moveTo;
@@ -136,7 +134,11 @@ class LayerWindow {
      * @param resizable 認める場合はtrue
      */
     set resizable(resizable: boolean) {
-        this.control.style.resize = resizable ? "both" : "none";
+        if (resizable) {
+            this.control.style.resize = "both";
+        } else {
+            this.control.style.resize = "none";
+        }
     }
 
     /**
@@ -175,6 +177,10 @@ class LayerWindow {
         this.moveTo(this.screenX + deltaX, this.screenY + deltaY);
     }
 
+    close() {
+        this.control.close();
+    }
+
     /**
      * モーダルダイアログを表示する
      * @param url 表示するサイトのURL。
@@ -192,11 +198,11 @@ class LayerWindow {
     }
 }
 
-export interface DialogOption {
+export interface DialogOption{
     /**
      * 疑似ウインドウを中央に表示するか
      */
-    center: boolean;
+    center:boolean;
     /**
      * 幅
      */
@@ -229,13 +235,25 @@ export async function showModalDialog(url: string, dialogArguments?: any, option
     const dialog = document.body.appendChild(document.createElement("dialog"));
     try {
         const lw = new LayerWindow(dialog);
-        if (dialogArguments !== undefined) { lw.dialogArguments = dialogArguments; }
-        if (options !== undefined) {
-            if (options.width !== undefined) { lw.outerWidth = options.width; }
-            if (options.height !== undefined) { lw.outerHeight = options.height; }
-            if (options.resizable !== undefined) { lw.resizable = options.resizable; }
-            if (options.top !== undefined) { lw.screenY = options.top; }
-            if (options.left !== undefined) { lw.screenX = options.left; }
+        if (dialogArguments !== undefined) {
+            lw.dialogArguments = dialogArguments;
+        }
+        if(typeof options !== 'undefined'){
+            if(typeof options.width === 'number'){
+                lw.outerWidth = options.width;
+            }
+            if (options.height !== undefined) {
+                lw.outerHeight = options.height;
+            }
+            if (options.resizable !== undefined) {
+                lw.resizable = options.resizable;
+            }
+            if (options.top !== undefined) {
+                lw.screenY = options.top;
+            }
+            if (options.left !== undefined) {
+                lw.screenX = options.left;
+            }
         }
         const result = lw.showModal(url);
         if (options?.center) {

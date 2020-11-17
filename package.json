@@ -1,10 +1,11 @@
 {
   "name": "@gonchan93/legacy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "showModalDialog Substitute",
   "main": "dist/Legacy.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,6 @@
   "bugs": {
     "url": "https://github.com/gonchan93/Legacy/issues"
   },
-  "homepage": "https://github.com/gonchan93/Legacy#readme"
+  "homepage": "https://github.com/gonchan93/Legacy#readme",
+  "devDependencies": {}
 }
