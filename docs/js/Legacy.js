@@ -42,9 +42,7 @@ class LayerWindow {
         const closeButton = buttonArea.appendChild(_document.createElement("input"));
         closeButton.type = "button";
         closeButton.value = "×";
-        closeButton.onclick = () => {
-            control.close();
-        };
+        closeButton.onclick = () => { this.close(); };
         this.content = control.appendChild(_document.createElement("iframe"));
         this.content.style.boxSizing = "border-box";
         this.content.style.width = "100%";
@@ -53,7 +51,7 @@ class LayerWindow {
             titleArea.innerText = innerWindow.document.title;
             innerWindow.dialogArguments = this.dialogArguments;
             //iframeで開いているページのcloseメソッドを書き換える
-            innerWindow.close = () => { control.close(); };
+            innerWindow.close = this.close.bind(this);
             innerWindow.resizeTo = this.resizeTo;
             innerWindow.resizeBy = this.resizeBy;
             innerWindow.moveTo = this.moveTo;
@@ -158,6 +156,9 @@ class LayerWindow {
     moveBy(deltaX, deltaY) {
         this.moveTo(this.screenX + deltaX, this.screenY + deltaY);
     }
+    close() {
+        this.control.close();
+    }
     /**
      * モーダルダイアログを表示する
      * @param url 表示するサイトのURL。
@@ -191,20 +192,22 @@ export function showModalDialog(url, dialogArguments, options) {
             if (dialogArguments !== undefined) {
                 lw.dialogArguments = dialogArguments;
             }
-            if (typeof (options === null || options === void 0 ? void 0 : options.width) === 'number') {
-                lw.outerWidth = options.width;
-            }
-            if ((options === null || options === void 0 ? void 0 : options.height) !== undefined) {
-                lw.outerHeight = options.height;
-            }
-            if ((options === null || options === void 0 ? void 0 : options.resizable) !== undefined) {
-                lw.resizable = options.resizable;
-            }
-            if ((options === null || options === void 0 ? void 0 : options.top) !== undefined) {
-                lw.screenY = options.top;
-            }
-            if ((options === null || options === void 0 ? void 0 : options.left) !== undefined) {
-                lw.screenX = options.left;
+            if (typeof options !== 'undefined') {
+                if (typeof options.width === 'number') {
+                    lw.outerWidth = options.width;
+                }
+                if (options.height !== undefined) {
+                    lw.outerHeight = options.height;
+                }
+                if (options.resizable !== undefined) {
+                    lw.resizable = options.resizable;
+                }
+                if (options.top !== undefined) {
+                    lw.screenY = options.top;
+                }
+                if (options.left !== undefined) {
+                    lw.screenX = options.left;
+                }
             }
             const result = lw.showModal(url);
             if (options === null || options === void 0 ? void 0 : options.center) {
